@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style xmlns="http://purl.org/net/xbiblio/csl" version="1.0" class="in-text" default-locale="en-US">
+  <info>
+    <title>Pedoman Jurnal Indonesia (Custom Author-Date)</title>
+    <id>http://www.zotero.org/styles/pedoman-jurnal-indonesia-custom-author-date</id>
+    <link href="http://www.zotero.org/styles/pedoman-jurnal-indonesia-custom-author-date" rel="self"/>
+    <author><name>Custom style based on supplied journal guidelines</name></author>
+    <category citation-format="author-date"/>
+    <summary>Adapted author-date style with colon page locators and Indonesian bibliography conventions.</summary>
+    <updated>2026-11-09T00:00:00+00:00</updated>
+    <rights license="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</rights>
+  </info>
+
+  <locale xml:lang="en">
+    <terms>
+      <term name="et-al">et.al.</term>
+      <term name="editor" form="short">ed.</term>
+      <term name="editor" form="short" plural="true">eds.</term>
+      <term name="page" form="short">Hal.</term>
+      <term name="translator" form="short">Terj.</term>
+    </terms>
+  </locale>
+
+  <macro name="author-short">
+    <names variable="author" et-al-min="4" et-al-use-first="1">
+      <name form="short" and="text" delimiter=", " delimiter-precedes-last="never"/>
+      <et-al prefix=", "/>
+      <substitute>
+        <names variable="editor">
+          <name form="short"/>
+        </names>
+        <text variable="title"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <macro name="author-bibliography">
+    <names variable="author" et-al-min="99" et-al-use-first="99">
+      <name name-as-sort-order="all" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="never"/>
+      <substitute>
+        <names variable="editor">
+          <name name-as-sort-order="all" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="never"/>
+        </names>
+        <names variable="translator">
+          <name name-as-sort-order="all" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="never"/>
+        </names>
+        <text variable="title"/>
+      </substitute>
+    </names>
+  </macro>
+
+  <macro name="issued-year">
+    <choose>
+      <if variable="issued">
+        <date variable="issued"><date-part name="year"/></date>
+        <text variable="year-suffix"/>
+      </if>
+      <else><text value="Tanpa tahun"/></else>
+    </choose>
+  </macro>
+
+  <macro name="place-publisher">
+    <group delimiter=": ">
+      <text variable="publisher-place"/>
+      <text variable="publisher"/>
+    </group>
+  </macro>
+
+  <macro name="access-date">
+    <group delimiter=" ">
+      <text value="Diakses"/>
+      <date variable="accessed">
+        <date-part name="day"/>
+        <date-part name="month" form="long"/>
+        <date-part name="year"/>
+      </date>
+    </group>
+  </macro>
+
+  <citation disambiguate-add-year-suffix="true" collapse="year">
+    <sort>
+      <key macro="author-short"/>
+      <key macro="issued-year"/>
+    </sort>
+    <layout prefix="(" suffix=")" delimiter="; ">
+      <group delimiter="">
+        <text macro="author-short"/>
+        <text macro="issued-year" prefix=", "/>
+        <text variable="locator" prefix=":"/>
+      </group>
+    </layout>
+  </citation>
+
+  <bibliography hanging-indent="true" et-al-min="99" et-al-use-first="99">
+    <sort>
+      <key macro="author-bibliography"/>
+      <key macro="issued-year"/>
+      <key variable="title"/>
+    </sort>
+    <layout>
+      <group delimiter=". ">
+        <text macro="author-bibliography"/>
+        <text macro="issued-year"/>
+        <choose>
+          <if type="book">
+            <text variable="title" font-style="italic"/>
+            <text macro="place-publisher"/>
+          </if>
+
+          <else-if type="chapter">
+            <text variable="title" quotes="true"/>
+            <group delimiter=". ">
+              <group delimiter=" ">
+                <text value="Dalam"/>
+                <names variable="editor">
+                  <name name-as-sort-order="all" sort-separator=", " initialize-with=". " delimiter=", " delimiter-precedes-last="never"/>
+                  <label form="short" prefix=", " suffix="."/>
+                </names>
+                <text variable="container-title" font-style="italic"/>
+              </group>
+              <group delimiter=" ">
+                <text value="Hal."/>
+                <text variable="page"/>
+              </group>
+              <text macro="place-publisher"/>
+            </group>
+          </else-if>
+
+          <else-if type="article-journal">
+            <text variable="title" quotes="true"/>
+            <group delimiter=" ">
+              <text variable="container-title" font-style="italic"/>
+              <text variable="volume"/>
+              <text variable="issue" prefix="(" suffix="):"/>
+              <text variable="page"/>
+            </group>
+          </else-if>
+
+          <else-if type="article-magazine article-newspaper">
+            <text variable="title" quotes="true"/>
+            <group delimiter=", ">
+              <text variable="container-title" font-style="italic"/>
+              <date variable="issued"><date-part name="day"/> <date-part name="month" form="long"/></date>
+              <text variable="page"/>
+            </group>
+          </else-if>
+
+          <else-if type="thesis">
+            <text variable="title" font-style="italic"/>
+            <group delimiter=". ">
+              <text variable="genre"/>
+              <text variable="publisher"/>
+            </group>
+          </else-if>
+
+          <else-if type="paper-conference">
+            <text variable="title" quotes="true"/>
+            <group delimiter=", ">
+              <text variable="genre"/>
+              <text variable="event"/>
+              <text variable="event-place"/>
+              <date variable="issued"><date-part name="month" form="long"/> <date-part name="day"/></date>
+            </group>
+          </else-if>
+
+          <else-if type="webpage post-weblog">
+            <text variable="title" quotes="true"/>
+            <text variable="URL"/>
+            <text macro="access-date"/>
+          </else-if>
+
+          <else>
+            <text variable="title" font-style="italic"/>
+            <text macro="place-publisher"/>
+          </else>
+        </choose>
+      </group>
+    </layout>
+  </bibliography>
+</style>
